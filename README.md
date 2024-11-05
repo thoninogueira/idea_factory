@@ -25,8 +25,6 @@ Este projeto é um gerador de ideias de startup que utiliza a API do ChatGPT par
 - Digite uma ideia ou tema para a startup no campo de entrada.
 - Clique em “Gerar Ideia” para receber uma proposta gerada pela API.
 
-## Exemplo de Uso
-![Exemplo de uso da aplicação](screenshot.png) *(Substitua pelo caminho correto da imagem)*
 
 ## Contribuição
 Sinta-se à vontade para contribuir! Abra um pull request ou crie um issue.
