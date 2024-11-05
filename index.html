@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,18 +20,22 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
         }
         input[type="text"], button {
             padding: 10px;
             margin: 10px 0;
-            width: 80%;
+            width: 100%;
             font-size: 1em;
+            box-sizing: border-box;
         }
         button {
             background-color: #4CAF50;
             color: white;
             border: none;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         button:hover {
             background-color: #45a049;
@@ -39,6 +43,11 @@
         #output {
             margin-top: 20px;
             font-size: 1.1em;
+            color: #333;
+        }
+        #loading {
+            font-size: 1em;
+            color: #777;
         }
     </style>
 </head>
@@ -47,9 +56,52 @@
         <h2>Gerador de Ideias de Startup</h2>
         <input type="text" id="startupInput" placeholder="Digite sua ideia inicial...">
         <button onclick="gerarIdeia()">Gerar Ideia</button>
+        <div id="loading" style="display: none;">Gerando ideia, por favor aguarde...</div>
         <div id="output"></div>
     </div>
 
-    <script src="app.js"></script>
+    <script>
+        function gerarIdeia() {
+            const userInput = document.getElementById('startupInput').value;
+            const output = document.getElementById('output');
+            const loadingMessage = document.getElementById('loading');
+            
+            // Limpa a saída e mostra a mensagem de carregamento
+            output.innerHTML = '';
+            loadingMessage.style.display = 'block';
+
+            // Verificação para entrada vazia
+            if (userInput.trim() === "") {
+                alert("Por favor, digite uma ideia ou tema para a startup.");
+                loadingMessage.style.display = 'none';
+                return;
+            }
+
+            // Dados que serão enviados ao backend
+            const inputData = { input: userInput };
+
+            // Chamada para o backend
+            fetch('http://127.0.0.1:5000/gerar_ideia', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(inputData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Exibir a ideia gerada na interface
+                output.innerHTML = data.ideia;
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                output.innerHTML = 'Erro ao gerar a ideia. Tente novamente.';
+            })
+            .finally(() => {
+                // Esconde a mensagem de carregamento
+                loadingMessage.style.display = 'none';
+            });
+        }
+    </script>
 </body>
 </html>
